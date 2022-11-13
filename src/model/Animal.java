@@ -59,66 +59,18 @@ public abstract class Animal {
 
     public boolean isCanSwim() {return canSwim;}
 
-    //discard, use move in controller
-//    public void move(int direction){
-////        monitor.printChessboard(board);
-////        System.out.println(board.getSquareByAnimal(this).getLocation()[0]);
-////        System.out.println(board.getSquareByAnimal(this).getLocation()[1]);
-////        for (int i=0;i<9;i++){
-////            for (int j=0;j<7;j++){
-////                System.out.print(board.getSquares()[i][j]);
-////            }
-////            System.out.println();
-////        }
-//        int x=this.x, y=this.y;
-//        if(this.getSide()==0){
-//            if (direction==0)
-//                x=x-1;
-//            else if (direction==1)
-//                x=x+1;
-//            else if (direction==2)
-//                y=y-1;
-//            else if (direction==3)
-//                y=y+1;
-//        }else{
-//            if (direction==0)
-//                x=x+1;
-//            else if (direction==1)
-//                x=x-1;
-//            else if (direction==2)
-//                y=y+1;
-//            else if (direction==3)
-//                y=y-1;
-//        }
-//        if(x<0|x>8)
-//            x=this.x;
-//        else if(y<0|y>6)
-//            y=this.x;
-//        else
-//            if(this.checkMoveLegal(board.getSquares()[x][y]))
-//                if(this.checkJumpLegal(board.getSquares()[x][y]))
-//                    if (x==this.x)
-//                        y=y+2;
-//                    else if(y==this.x)
-//                        x=x+3;
-//            board.getSquares()[this.x][this.y].setAnimal(null);
-//            board.getSquares()[x][y].setAnimal(this);
-//        this.setLocation(x,y);
-//
-//    }//0:up 1:down 2:left 3:right
+
     public boolean move(Square s){
         if(this.checkMoveLegal(s)) {
             if (s.getAnimal() != null) {
                 s.getAnimal().setAlive(false);
             }
-
             //clear the animal at the original location
             board.getSquares()[this.getLocation()[0]][this.getLocation()[1]].setAnimal(null);
             //set the new location to animal
             this.setLocation(s.getLocation()[0], s.getLocation()[1]);
             //set animal in new location in chessboard
             board.getSquares()[s.getLocation()[0]][s.getLocation()[1]].setAnimal(this);
-            System.out.println(board.getSquares()[7][0].getAnimal());
             return true;
         }
         else return false;
@@ -134,9 +86,10 @@ public abstract class Animal {
         if(a.side==this.side)
             return false;
         else
-        if (typea.equals("河")&& type.equals(" "))
+        if (typea.equals("河")&& type.equals("　"))
+
             return false;
-        else if(typea.equals(" ") && type.equals("河"))
+        else if(typea.equals("　") && type.equals("河"))
             return false;
         else if(typea.equals("陷"))
             return true;
@@ -153,8 +106,6 @@ public abstract class Animal {
     public boolean checkJumpLegal(Square s) {
         if (!(this.getName().equals("獅")||this.getName().equals("虎")))
             return false;
-        if(!s.getType().equals("河"))
-            return false;
         if(s.getAnimal()!=null)
             if(!this.isCanCapture(s.getAnimal()))
                 return false;
@@ -164,12 +115,12 @@ public abstract class Animal {
         int y0=this.y;
         int y1=s.getLocation()[1];
         if(x0==x1)
-            for(int j=y1;j<=y1+1;j++){
+            for(int j=y1+1;j<=y1+2;j++){
                 if(board.getSquares()[x0][j].getAnimal()!=null &&board.getSquares()[x0][j].getAnimal().getName().equals("鼠"))
                     return false;
             }
         else if(y0==y1)
-            for(int i=x1;i<=x1+2;i++){
+            for(int i=x1+1;i<=x1+3;i++){
                 if(board.getSquares()[i][y0].getAnimal()!=null && board.getSquares()[i][y0].getAnimal().getName().equals("鼠"))
                     return false;
             }
@@ -177,11 +128,16 @@ public abstract class Animal {
     }//check if it can jump to square s, s should be opposite river
 
     public boolean checkSwimLegal(Square s) {
-        if (this.canSwim)
-            if (s.getAnimal() != null && !(s.getType().equals(board.getSquareByAnimal(this).getType())))
-                return false;
-            else
+
+        if (this.canSwim) {
+            if (s.getAnimal() != null) {
+                if (s.getAnimal().rank == 1 || s.getAnimal().rank == 8) {
+                    if (isCanCapture(s.getAnimal())) return true;
+                    else return false;
+                } else return false;
+            } else
                 return true;
+        }
         else
             return false;
     }//check if it can swim to square s, if rat in river, use this function
@@ -190,12 +146,9 @@ public abstract class Animal {
         int x=s.getLocation()[0];
         int y=s.getLocation()[1];
 
+        //boundary
+        if(x == this.x && y == this.y) return false;
 
-        //can not be out of chess board
-        if (x<0||x>8)
-            return false;
-        if (y<0||y>6)
-            return false;
 
         //can not move into player's own den
         if(this.getSide()==0){
@@ -206,7 +159,7 @@ public abstract class Animal {
                 return false;
         }
         //check swim legality
-        if (s.getType().equals("河")){
+        if (s.getType().equals("河") || board.getSquareByAnimal(this).getType().equals("河")){
             return  checkSwimLegal(s);
         }
         //check jump legality, regard the expected destination as the adjacent one in river, not the real destination.
