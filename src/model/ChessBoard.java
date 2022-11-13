@@ -25,7 +25,7 @@ public class ChessBoard {
                 else if ((i<=5&&i>=3)&&(j==1||j==2||j==4||j==5))
                     chessboard[i][j] = new Square(i, j, "河");
                 else
-                    chessboard[i][j] = new Square(i, j, " ");
+                    chessboard[i][j] = new Square(i, j, "　");
             }
         }
         for (Animal animal1 : player0.getAnimals())
