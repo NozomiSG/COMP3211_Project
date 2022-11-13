@@ -47,14 +47,9 @@ public class gameController {
                 Animal selected_animal = readActionToAnimal(command);
                 Square dest = readActionToSquare(command);
                 boolean legal = selected_animal.move(dest);
-//                System.out.println(board.getSquares()[8][0].getAnimal());
-//                System.out.println(board.getSquares()[7][0].getAnimal());
                 System.out.println(board.getSquares()[7][0].getAnimal());
                 if(legal){
                     changeTurn();
-                    System.out.println("!");
-//                    System.out.println(board.getSquares()[7][0].printSquare());
-//                    System.out.println(board.getSquares()[7][0].getAnimal());
                     monitor.printChessboard(board);
                     monitor.printTurnChange();
                 }
