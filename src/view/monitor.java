@@ -16,7 +16,9 @@ public class monitor {
         }
     }
 
-    public static void printWarning(){} //print warning message when users try to do invalid action
+    public static void printWarning(){
+        System.out.println();
+    } //print warning message when users try to do invalid action
 
     public static void printWelcome() {} //print welcome message
 

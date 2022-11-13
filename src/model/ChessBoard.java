@@ -2,7 +2,7 @@ package model;
 
 public class ChessBoard {
     // animal in two camp
-    public final static ChessBoard board = new ChessBoard();
+    public static ChessBoard board = new ChessBoard();
     private Player player0;
     private Player player1;
 

@@ -1,6 +1,12 @@
 package model;
 
+import model.Square;
+import controller.gameController;
+
 import static model.ChessBoard.board;
+
+import model.Animals.*;
+import view.monitor;
 
 public abstract class Animal {
     private int rank; //1-8, 0 if in dens
@@ -8,6 +14,7 @@ public abstract class Animal {
     private int side;
     private boolean canSwim;
     private boolean canJump;
+    private boolean alive = true;
 
 
     protected Animal() {}
@@ -39,6 +46,12 @@ public abstract class Animal {
 
     public boolean isCanJump() {return canJump;}
 
+    public void setAlive(boolean isAlive){
+        this.alive = isAlive;
+    }
+    public boolean getAlive(){
+        return this.alive;
+    }
     public void setCanSwim(boolean canSwim) {
         canSwim = this.getName().equals("鼠");
         this.canSwim=canSwim;
@@ -93,6 +106,23 @@ public abstract class Animal {
 //        this.setLocation(x,y);
 //
 //    }//0:up 1:down 2:left 3:right
+    public boolean move(Square s){
+        if(this.checkMoveLegal(s)) {
+            if (s.getAnimal() != null) {
+                s.getAnimal().setAlive(false);
+            }
+
+            //clear the animal at the original location
+            board.getSquares()[this.getLocation()[0]][this.getLocation()[1]].setAnimal(null);
+            //set the new location to animal
+            this.setLocation(s.getLocation()[0], s.getLocation()[1]);
+            //set animal in new location in chessboard
+            board.getSquares()[s.getLocation()[0]][s.getLocation()[1]].setAnimal(this);
+            System.out.println(board.getSquares()[7][0].getAnimal());
+            return true;
+        }
+        else return false;
+    }
 
 
     public boolean isCanCapture(Animal a){
@@ -104,19 +134,19 @@ public abstract class Animal {
         if(a.side==this.side)
             return false;
         else
-            if (typea.equals("河")&& type.equals(" "))
-                return false;
-            else if(typea.equals(" ") && type.equals("河"))
-                return false;
-            else if(typea.equals("陷"))
-                return true;
-            else
-                if(this.getName().equals("鼠") && a.getName().equals("象"))
-                    return true;
-                else if (a.rank>this.rank)
-                    return false;
-                else
-                    return true;
+        if (typea.equals("河")&& type.equals(" "))
+            return false;
+        else if(typea.equals(" ") && type.equals("河"))
+            return false;
+        else if(typea.equals("陷"))
+            return true;
+        else
+        if(this.getName().equals("鼠") && a.getName().equals("象"))
+            return true;
+        else if (a.rank>this.rank)
+            return false;
+        else
+            return true;
     }
 
 
@@ -160,10 +190,6 @@ public abstract class Animal {
         int x=s.getLocation()[0];
         int y=s.getLocation()[1];
 
-        //must be adjacent
-//        if(x!=this.x)//?
-//            if(y!=this.y)
-//                return false;
 
         //can not be out of chess board
         if (x<0||x>8)
