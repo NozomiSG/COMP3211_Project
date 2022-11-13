@@ -52,7 +52,7 @@ public class gameController {
                     changeTurn();
                     monitor.printChessboard(board);
                     monitor.printTurnChange();
-                    //test
+
                 }
             }
 
