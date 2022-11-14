@@ -35,7 +35,7 @@ public class Square {
         if (currentAnimal == null)
             return " " + getType() + " ";
         int side = currentAnimal.getSide();
-        if (side == 1) {
+        if (side == 0) {
             return currentAnimal.getRank() + currentAnimal.getName() + " ";
         }
         else {

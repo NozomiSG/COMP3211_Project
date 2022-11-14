@@ -31,18 +31,6 @@ public class PlayerTest {
         assertEquals(1, testPlayer2.getSide());
     }
 
-    @Test
-    public void animalMoveTest() {
-        //test animalMove(Animal animal, String dir)
-        int originalX = testPlayer1.getAnimals()[0].getLocation()[0];
-        int originalY = testPlayer1.getAnimals()[0].getLocation()[1];
-        testPlayer1.animalMove(testPlayer1.getAnimals()[0],"up" );
-        int nextX = testPlayer1.getAnimals()[0].getLocation()[0];
-        int nextY = testPlayer1.getAnimals()[0].getLocation()[1];
-
-        assertEquals(originalX, nextX);
-        assertEquals(originalY+1, nextY);
-    }
 
     @Test
     public void setSideTest() {

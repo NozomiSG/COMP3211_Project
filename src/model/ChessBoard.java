@@ -44,7 +44,6 @@ public class ChessBoard {
         return this.getSquares()[x][y];
     }
 
-
     public Player getPlayer0() {
         return player0;
     }
@@ -53,5 +52,4 @@ public class ChessBoard {
         return player1;
     }
 
-    public ChessBoard getBoard(){return board;}
 }
