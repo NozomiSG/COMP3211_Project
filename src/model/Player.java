@@ -32,7 +32,4 @@ public class Player {
         return animals;
     }
 
-    public void animalMove(Animal animal, String dir) {}
-
-
 }

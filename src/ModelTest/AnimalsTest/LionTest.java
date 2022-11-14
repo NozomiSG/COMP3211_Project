@@ -30,8 +30,8 @@ public class LionTest {
 
     @Test
     public void nameTest() {
-        assertEquals(lion0.getName(),"Lion");
-        assertEquals(lion1.getName(),"Lion");
+        assertEquals(lion0.getName(),"獅");
+        assertEquals(lion1.getName(),"獅");
     }
 
 }

@@ -77,29 +77,22 @@ public abstract class Animal {
     }
 
 
-    public boolean isCanCapture(Animal a){
-        int xa=a.getLocation()[0];
-        int ya=a.getLocation()[1];
+    public boolean isCanCapture(Animal enemy){
         String type = board.getSquareByAnimal(this).getType();
-        String typea = board.getSquareByAnimal(a).getType();
+        String type_enemy = board.getSquareByAnimal(enemy).getType();
 
-        if(a.side==this.side)
+        if(enemy.side==this.side)
             return false;
-        else
-        if (typea.equals("河")&& type.equals("　"))
-
+        else if (type_enemy.equals("河")&& type.equals("　"))
             return false;
-        else if(typea.equals("　") && type.equals("河"))
+        else if(type_enemy.equals("　") && type.equals("河"))
             return false;
-        else if(typea.equals("陷"))
+        else if(type_enemy.equals("陷"))
+            return true;
+        else if(this.getName().equals("鼠") && enemy.getName().equals("象"))
             return true;
         else
-        if(this.getName().equals("鼠") && a.getName().equals("象"))
-            return true;
-        else if (a.rank>this.rank)
-            return false;
-        else
-            return true;
+            return enemy.rank <= this.rank;
     }
 
 

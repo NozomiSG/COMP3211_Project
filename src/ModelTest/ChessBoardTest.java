@@ -26,7 +26,7 @@ public class ChessBoardTest {
         assertEquals("陷", testBoard.getSquares()[0][2].getType());
         assertEquals("河", testBoard.getSquares()[5][1].getType());
         assertEquals("穴", testBoard.getSquares()[8][3].getType());
-        assertEquals(" ", testBoard.getSquares()[0][0].getType());
+        assertEquals("　", testBoard.getSquares()[0][0].getType());
     }
 
 
