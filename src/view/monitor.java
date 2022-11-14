@@ -18,12 +18,12 @@ public class monitor {
     }
 
     public static void printWarning(String warn){
-        System.out.println(warn);
+        System.out.println("Warning: " + warn);
     } //print warning message when users try to do invalid action
 
     public static void printWelcome() {} //print welcome message
 
-    public static void printHelp() {} // print help message including move and manual commands
+    public static void printManual() {} // print help message including move and manual commands
 
     public static void noticeToMove(int side) {
         if (side == 0)
@@ -34,7 +34,10 @@ public class monitor {
 
 
     public static void printWinMessage(int side) {
-
+        if (side == 0)
+            System.out.println("Player1 win the game!");
+        else
+            System.out.println("Player2 win the game!");
     } // Print winner
 
 }

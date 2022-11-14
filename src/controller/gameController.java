@@ -22,23 +22,22 @@ public class gameController {
     public static void gameProcess() {
         // Print welcome message
         monitor.printWelcome();
-        monitor.printHelp();
+        monitor.printManual();
         Scanner scanner = new Scanner(System.in);
         monitor.printChessboard(board);
         String command;
         while (true) {
-            System.out.println("Please input command without blanks, end with enter");
             monitor.noticeToMove(side);
             command = scanner.next();
             while(! commandLegal(command)){
-                System.out.print("Command illegal, please input again: ");
+                monitor.printWarning("Command illegal, please input again!");
                 command = scanner.next();
             }
             if(command.equals("exit")){
                 break;
             }
             if(command.equals("help")){
-                monitor.printHelp();
+                monitor.printManual();
                 break;
             }
             else{
