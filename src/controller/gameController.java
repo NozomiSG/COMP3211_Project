@@ -1,13 +1,11 @@
 package controller;
 
 import model.Animal;
-import model.Animals.Cat;
-import model.ChessBoard;
 import model.Player;
 import model.Square;
 import view.monitor;
 
-import java.awt.*;
+
 import java.util.Scanner;
 
 
@@ -30,15 +28,19 @@ public class gameController {
             monitor.noticeToMove(side);
             command = scanner.next();
             while(! commandLegal(command)){
-                monitor.printWarning("Command illegal, please input again!", true);
+                monitor.printWarning("Unknown command, please input again!", true);
+                monitor.noticeToMove(side);
                 command = scanner.next();
             }
-            if(command.equals("exit")){
-                break;
+            if (command.equals("exit")){
+                return;
             }
-            if(command.equals("help")){
+            if (command.equals("help")){
                 monitor.printManual();
                 break;
+            }
+            if (command.equals("restart")){
+                gameProcess();
             }
             else{
                 Animal selected_animal = readActionToAnimal(command);
@@ -188,9 +190,12 @@ public class gameController {
     }
 
     public static boolean commandLegal(String input){
-        if(!(input.length()==2 || input.length()==3 || input.length()==4 )) return false;
+        if(!(input.length()==2 || input.length()==3 || input.length()==4 || input.length()==7 )) return false;
         else if(input.length() == 4){
             return input.equals("help") || input.equals("exit");
+        }
+        else if(input.length() == 7){
+            return input.equals("restart");
         }
         else{
             if(input.charAt(0)-48<1 || input.charAt(0)-48>8) return false;
