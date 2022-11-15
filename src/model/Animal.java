@@ -125,8 +125,7 @@ public abstract class Animal {
         if (this.canSwim) {
             if (s.getAnimal() != null) {
                 if (s.getAnimal().rank == 1 || s.getAnimal().rank == 8) {
-                    if (isCanCapture(s.getAnimal())) return true;
-                    else return false;
+                    return isCanCapture(s.getAnimal());
                 } else return false;
             } else
                 return true;
@@ -145,10 +144,13 @@ public abstract class Animal {
 
         //can not move into player's own den
         if(this.getSide()==0){
-            if (x == 8 && y == 3)
+            if (x == 8 && y == 3) {
+                monitor.printWarning("Your animal cannot move into your own den!");
                 return false;
+            }
         }else{
             if (x == 0 && y == 3)
+                monitor.printWarning("Your animal cannot move into your own den!");
                 return false;
         }
         //check swim legality
