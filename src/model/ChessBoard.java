@@ -3,16 +3,16 @@ package model;
 public class ChessBoard {
     // animal in two camp
     public static ChessBoard board = new ChessBoard();
-    private Player player0;
-    private Player player1;
-
+    private static Player player0;
+    private static Player player1;
     // Init every square in chessboard
-    private final Square[][] chessboard = new Square[9][7];
+    private static Square[][] chessboard;
     public ChessBoard() {
         initChessBoard();
     }
 
     public void initChessBoard() {
+        chessboard = new Square[9][7];
         player0 = new Player(0);
         player1 = new Player(1);
         //chessboard = new Square[9][7];
