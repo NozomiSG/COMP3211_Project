@@ -65,6 +65,7 @@ public abstract class Animal {
             if (s.getAnimal() != null) {
                 s.getAnimal().setAlive(false);
             }
+            System.out.println("succ move");
             //clear the animal at the original location
             board.getSquares()[this.getLocation()[0]][this.getLocation()[1]].setAnimal(null);
             //set the new location to animal
@@ -77,22 +78,30 @@ public abstract class Animal {
     }
 
 
-    public boolean isCanCapture(Animal enemy){
+    public boolean isCanCapture(Animal a){
+        int xa=a.getLocation()[0];
+        int ya=a.getLocation()[1];
         String type = board.getSquareByAnimal(this).getType();
-        String type_enemy = board.getSquareByAnimal(enemy).getType();
+        String typea = board.getSquareByAnimal(a).getType();
+        System.out.println("is can capture");
 
-        if(enemy.side==this.side)
+        if(a.side==this.side)
             return false;
-        else if (type_enemy.equals("河")&& type.equals("　"))
+        else
+        if (typea.equals("河")&& type.equals("　"))
+
             return false;
-        else if(type_enemy.equals("　") && type.equals("河"))
+        else if(typea.equals("　") && type.equals("河"))
             return false;
-        else if(type_enemy.equals("陷"))
-            return true;
-        else if(this.getName().equals("鼠") && enemy.getName().equals("象"))
+        else if(typea.equals("陷"))
             return true;
         else
-            return enemy.rank <= this.rank;
+        if(this.getName().equals("鼠") && a.getName().equals("象"))
+            return true;
+        else if (a.rank>this.rank)
+            return false;
+        else
+            return true;
     }
 
 
@@ -121,11 +130,12 @@ public abstract class Animal {
     }//check if it can jump to square s, s should be opposite river
 
     public boolean checkSwimLegal(Square s) {
-
+        System.out.println("check swim legal");
         if (this.canSwim) {
             if (s.getAnimal() != null) {
                 if (s.getAnimal().rank == 1 || s.getAnimal().rank == 8) {
-                    return isCanCapture(s.getAnimal());
+                    if (isCanCapture(s.getAnimal())) return true;
+                    else return false;
                 } else return false;
             } else
                 return true;
@@ -144,13 +154,10 @@ public abstract class Animal {
 
         //can not move into player's own den
         if(this.getSide()==0){
-            if (x == 8 && y == 3) {
-                monitor.printWarning("Your animal cannot move into your own den!");
+            if (x == 8 && y == 3)
                 return false;
-            }
         }else{
             if (x == 0 && y == 3)
-                monitor.printWarning("Your animal cannot move into your own den!");
                 return false;
         }
         //check swim legality
