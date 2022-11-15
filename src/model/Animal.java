@@ -40,7 +40,6 @@ public abstract class Animal {
     }
 
     public void setCanJump(boolean canJump) {
-        canJump = this.getName().equals("虎") | this.getName().equals("獅");
         this.canJump=canJump;
     }
 
@@ -53,7 +52,6 @@ public abstract class Animal {
         return this.alive;
     }
     public void setCanSwim(boolean canSwim) {
-        canSwim = this.getName().equals("鼠");
         this.canSwim=canSwim;
     }
 
@@ -64,6 +62,7 @@ public abstract class Animal {
         if(this.checkMoveLegal(s, true)) {
             if (s.getAnimal() != null) {
                 s.getAnimal().setAlive(false);
+                s.setAnimal(null);
             }
             //clear the animal at the original location
             board.getSquares()[this.getLocation()[0]][this.getLocation()[1]].setAnimal(null);
@@ -85,17 +84,21 @@ public abstract class Animal {
             return false;
         }
         else if (type_enemy.equals("河")&& type.equals("　")) {
-            monitor.printWarning("You can't capture animal on the land!", ifPrint);
+            monitor.printWarning("Animal can't capture enemy on the land!", ifPrint);
             return false;
         }
         else if(type_enemy.equals("　") && type.equals("河")) {
-            monitor.printWarning("You can't capture animal in the river!", ifPrint);
+            monitor.printWarning("Animal can't capture enemy in the river!", ifPrint);
             return false;
         }
         else if(type_enemy.equals("陷"))
             return true;
         else if(this.getName().equals("鼠") && enemy.getName().equals("象"))
             return true;
+        else if(this.getName().equals("象") && enemy.getName().equals("鼠")) {
+            monitor.printWarning("Elephant cannot capture rat!", ifPrint);
+            return false;
+        }
         else {
             if (enemy.rank > this.rank) {
                 monitor.printWarning("You can not capture animal with higher rank!", ifPrint);
@@ -161,10 +164,14 @@ public abstract class Animal {
     public boolean checkMoveLegal(Square s, boolean ifPrint) {
         int x=s.getLocation()[0];
         int y=s.getLocation()[1];
-
+        // Check alive
+        if (!getAlive()) {
+            monitor.printWarning(this.getName()+" has been slain!", ifPrint);
+            return false;
+        }
         //boundary
         if(x == this.x && y == this.y) {
-            monitor.printWarning("You cannot go outside the boundaries!", ifPrint);
+            monitor.printWarning("Your animal cannot move outside the boundaries!", ifPrint);
             return false;
         }
         //can not move into player's own den
