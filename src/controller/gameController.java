@@ -190,21 +190,20 @@ public class gameController {
     }
 
     public static boolean commandLegal(String input){
-        if(!(input.length()==2 || input.length()==3 || input.length()==4 || input.length()==7 )) return false;
-        else if(input.length() == 4){
+        if(input.length() == 4){
             return input.equals("help") || input.equals("exit");
         }
         else if(input.length() == 7){
             return input.equals("restart");
         }
-        else{
+        else if(input.length() == 2){
             if(input.charAt(0)-48<1 || input.charAt(0)-48>8) return false;
             for (char c: "wasd".toCharArray()){
                 if (c == input.charAt(1)) {
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     }
 }
