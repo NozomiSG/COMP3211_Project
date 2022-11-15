@@ -30,7 +30,7 @@ public class gameController {
             monitor.noticeToMove(side);
             command = scanner.next();
             while(! commandLegal(command)){
-                monitor.printWarning("Command illegal, please input again!");
+                monitor.printWarning("Command illegal, please input again!", true);
                 command = scanner.next();
             }
             if(command.equals("exit")){
@@ -110,11 +110,24 @@ public class gameController {
                 else ay -=1;
             }
         } else {
-            if (direction == 'w') ax -= 1;
-            else if (direction == 's') ax += 1;
-            else if (direction == 'a') ay -= 1;
-            else if (direction == 'd') ay += 1;
+            if (direction == 'w') {
+                if (ax != 0)
+                    ax -= 1;
+            }
+            else if (direction == 's') {
+                if (ax != 8)
+                    ax += 1;
+            }
+            else if (direction == 'a') {
+                if (ay != 0)
+                    ay -= 1;
+            }
+            else if (direction == 'd') {
+                if (ay != 6)
+                    ay += 1;
+            }
         }
+
         return board.getSquares()[ax][ay];
     }
 
@@ -167,7 +180,7 @@ public class gameController {
                 for (int j = 0; j < 4; j++) {
                     input = input +String.valueOf(direction.charAt(j));
                     Square s = readActionToSquare(input);
-                    if(animals[i].checkMoveLegal(s)) return true;
+                    if(animals[i].checkMoveLegal(s, false)) return true;
                 }
             }
         }
