@@ -129,7 +129,6 @@ public class gameController {
                     ay += 1;
             }
         }
-
         return board.getSquares()[ax][ay];
     }
 
@@ -180,7 +179,7 @@ public class gameController {
             input = String.valueOf(i+1);
             if (animals[i].getAlive()) {
                 for (int j = 0; j < 4; j++) {
-                    input = input +String.valueOf(direction.charAt(j));
+                    input = input + direction.charAt(j);
                     Square s = readActionToSquare(input);
                     if(animals[i].checkMoveLegal(s, false)) return true;
                 }
