@@ -40,7 +40,7 @@ public abstract class Animal {
     }
 
     public void setCanJump(boolean canJump) {
-        canJump = this.getName().equals("虎") | this.getName().equals("獅");
+//        canJump = this.getName().equals("虎") | this.getName().equals("獅");
         this.canJump=canJump;
     }
 
@@ -53,7 +53,7 @@ public abstract class Animal {
         return this.alive;
     }
     public void setCanSwim(boolean canSwim) {
-        canSwim = this.getName().equals("鼠");
+//        canSwim = this.getName().equals("鼠");
         this.canSwim=canSwim;
     }
 
