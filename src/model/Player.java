@@ -4,10 +4,11 @@ import model.Animals.*;
 
 public class Player {
 
-    private final Animal[] animals = new Animal[8];
+    private final Animal[] animals;
     private int side;
 
     public Player(int side) {
+        animals = new Animal[8];
         this.side = side; // The side of Player1 and Player2 represent by 0 and 1
         animals[0] = new Rat(side);
         animals[1] = new Cat(side);

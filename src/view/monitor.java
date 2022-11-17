@@ -17,8 +17,9 @@ public class monitor {
         System.out.println("==========================");
     }
 
-    public static void printWarning(String warn){
-        System.out.println("Warning: " + warn);
+    public static void printWarning(String warn, boolean ifPrint){
+        if (ifPrint)
+            System.out.println("Warning: " + warn);
     } //print warning message when users try to do invalid action
 
     public static void printWelcome() {} //print welcome message
