@@ -7,14 +7,20 @@ import model.Square;
 public class monitor {
     public static void printChessboard(ChessBoard board){
         Square[][] currentBoard = board.getSquares();
-        System.out.println("==========================");
+        System.out.println("============================");
         for (int i=0; i<9; i++) {
             for (int j=0; j<7; j++) {
-                System.out.print(currentBoard[i][j].printSquare());
+                if(currentBoard[i][j].getAnimal()!=null && currentBoard[i][j].getAnimal().getSide()==0){
+                    System.out.format("\33[41;97;1m"+currentBoard[i][j].printSquare()+"\033[m");
+                }else if(currentBoard[i][j].getAnimal()!=null && currentBoard[i][j].getAnimal().getSide()==1)
+                    System.out.format("\33[44;97;1m"+currentBoard[i][j].printSquare()+"\033[m");
+                else{
+                    System.out.format(currentBoard[i][j].printSquare());
+                }
             }
             System.out.println();
         }
-        System.out.println("==========================");
+        System.out.println("============================");
     }
 
     public static void printWarning(String warn, boolean ifPrint){
@@ -61,9 +67,9 @@ public class monitor {
 
     public static void noticeToMove(int side) {
         if (side == 0)
-            System.out.print("Player1 move: ");
+            System.out.print("\33[;31;1m"+"Player1 move: "+"\033[m");
         else
-            System.out.print("Player2 move: ");
+            System.out.print("\33[;34;1m"+"Player2 move: "+"\033[m");
     } // Notification to users in every turn.
 
 
