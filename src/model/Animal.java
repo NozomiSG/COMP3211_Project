@@ -1,11 +1,6 @@
 package model;
 
-import model.Square;
-import controller.gameController;
-
 import static model.ChessBoard.board;
-
-import model.Animals.*;
 import view.monitor;
 
 public abstract class Animal {
@@ -40,7 +35,6 @@ public abstract class Animal {
     }
 
     public void setCanJump(boolean canJump) {
-        canJump = this.getName().equals("虎") | this.getName().equals("獅");
         this.canJump=canJump;
     }
 
@@ -53,170 +47,165 @@ public abstract class Animal {
         return this.alive;
     }
     public void setCanSwim(boolean canSwim) {
-        canSwim = this.getName().equals("鼠");
         this.canSwim=canSwim;
     }
 
     public boolean isCanSwim() {return canSwim;}
 
-    //discard, use move in controller
-//    public void move(int direction){
-////        monitor.printChessboard(board);
-////        System.out.println(board.getSquareByAnimal(this).getLocation()[0]);
-////        System.out.println(board.getSquareByAnimal(this).getLocation()[1]);
-////        for (int i=0;i<9;i++){
-////            for (int j=0;j<7;j++){
-////                System.out.print(board.getSquares()[i][j]);
-////            }
-////            System.out.println();
-////        }
-//        int x=this.x, y=this.y;
-//        if(this.getSide()==0){
-//            if (direction==0)
-//                x=x-1;
-//            else if (direction==1)
-//                x=x+1;
-//            else if (direction==2)
-//                y=y-1;
-//            else if (direction==3)
-//                y=y+1;
-//        }else{
-//            if (direction==0)
-//                x=x+1;
-//            else if (direction==1)
-//                x=x-1;
-//            else if (direction==2)
-//                y=y+1;
-//            else if (direction==3)
-//                y=y-1;
-//        }
-//        if(x<0|x>8)
-//            x=this.x;
-//        else if(y<0|y>6)
-//            y=this.x;
-//        else
-//            if(this.checkMoveLegal(board.getSquares()[x][y]))
-//                if(this.checkJumpLegal(board.getSquares()[x][y]))
-//                    if (x==this.x)
-//                        y=y+2;
-//                    else if(y==this.x)
-//                        x=x+3;
-//            board.getSquares()[this.x][this.y].setAnimal(null);
-//            board.getSquares()[x][y].setAnimal(this);
-//        this.setLocation(x,y);
-//
-//    }//0:up 1:down 2:left 3:right
+
     public boolean move(Square s){
-        if(this.checkMoveLegal(s)) {
+        if(this.checkMoveLegal(s, true)) {
             if (s.getAnimal() != null) {
                 s.getAnimal().setAlive(false);
+                s.setAnimal(null);
             }
-
             //clear the animal at the original location
             board.getSquares()[this.getLocation()[0]][this.getLocation()[1]].setAnimal(null);
             //set the new location to animal
             this.setLocation(s.getLocation()[0], s.getLocation()[1]);
             //set animal in new location in chessboard
             board.getSquares()[s.getLocation()[0]][s.getLocation()[1]].setAnimal(this);
-            System.out.println(board.getSquares()[7][0].getAnimal());
             return true;
         }
         else return false;
     }
 
 
-    public boolean isCanCapture(Animal a){
-        int xa=a.getLocation()[0];
-        int ya=a.getLocation()[1];
+    public boolean isCanCapture(Animal enemy, boolean ifPrint){
         String type = board.getSquareByAnimal(this).getType();
-        String typea = board.getSquareByAnimal(a).getType();
+        String type_enemy = board.getSquareByAnimal(enemy).getType();
+        if(enemy.side==this.side) {
+            monitor.printWarning("You can't overlap with your animal!", ifPrint);
+            return false;
+        }
+        else if (type_enemy.equals("河")&& type.equals("　")) {
+            monitor.printWarning("Animal can't capture enemy on the land!", ifPrint);
+            return false;
+        }
+        else if(type_enemy.equals("　") && type.equals("河")) {
+            monitor.printWarning("Animal can't capture enemy in the river!", ifPrint);
+            return false;
+        }
+        else if(type_enemy.equals("陷"))
+            return true;
+        else if(this.getName().equals("鼠") && enemy.getName().equals("象"))
+            return true;
+        else if(this.getName().equals("象") && enemy.getName().equals("鼠")) {
+            monitor.printWarning("Elephant cannot capture rat!", ifPrint);
+            return false;
+        }
+        else {
+            if (enemy.rank > this.rank) {
+                monitor.printWarning("You can not capture animal with higher rank!", ifPrint);
+                return false;
+            }
+            return true;
+        }
 
-        if(a.side==this.side)
-            return false;
-        else
-        if (typea.equals("河")&& type.equals(" "))
-            return false;
-        else if(typea.equals(" ") && type.equals("河"))
-            return false;
-        else if(typea.equals("陷"))
-            return true;
-        else
-        if(this.getName().equals("鼠") && a.getName().equals("象"))
-            return true;
-        else if (a.rank>this.rank)
-            return false;
-        else
-            return true;
     }
 
 
-    public boolean checkJumpLegal(Square s) {
-        if (!(this.getName().equals("獅")||this.getName().equals("虎")))
+    public boolean checkJumpLegal(Square s, boolean ifPrint) {
+        if (!(this.getName().equals("獅")||this.getName().equals("虎"))) {
+            monitor.printWarning("This animal cannot jump!", ifPrint);
             return false;
-        if(!s.getType().equals("河"))
-            return false;
+        }
         if(s.getAnimal()!=null)
-            if(!this.isCanCapture(s.getAnimal()))
+            if(!this.isCanCapture(s.getAnimal(), ifPrint))
                 return false;
-
         int x0=this.x;
         int x1=s.getLocation()[0];
         int y0=this.y;
         int y1=s.getLocation()[1];
-        if(x0==x1)
-            for(int j=y1;j<=y1+1;j++){
-                if(board.getSquares()[x0][j].getAnimal()!=null &&board.getSquares()[x0][j].getAnimal().getName().equals("鼠"))
-                    return false;
+        if(x0==x1) {
+            // Check whether there is rat between y0 and y1
+            if (y0 > y1) {
+                int large = y0;
+                y0 = y1;
+                y1 = large;
             }
-        else if(y0==y1)
-            for(int i=x1;i<=x1+2;i++){
-                if(board.getSquares()[i][y0].getAnimal()!=null && board.getSquares()[i][y0].getAnimal().getName().equals("鼠"))
+            for (int j = y0+1; j < y1; j++) {
+                if (board.getSquares()[x0][j].getAnimal() != null && board.getSquares()[x0][j].getAnimal().getName().equals("鼠")) {
+                    monitor.printWarning("You can't jump over rat in the river!", ifPrint);
                     return false;
+                }
             }
+        }
+        else if(y0==y1) {
+            // Check whether there is rat between x0 and x1
+            if (x0 > x1) {
+                int large = x0;
+                x0 = x1;
+                x1 = large;
+            }
+            for (int i = x0 + 1; i < x1; i++) {
+                if (board.getSquares()[i][y0].getAnimal() != null && board.getSquares()[i][y0].getAnimal().getName().equals("鼠")) {
+                    monitor.printWarning("You can't jump over rat in the river!", ifPrint);
+                    return false;
+                }
+            }
+        }
         return true;
     }//check if it can jump to square s, s should be opposite river
 
-    public boolean checkSwimLegal(Square s) {
-        if (this.canSwim)
-            if (s.getAnimal() != null && !(s.getType().equals(board.getSquareByAnimal(this).getType())))
-                return false;
-            else
+    public boolean checkSwimLegal(Square s, boolean ifPrint) {
+        if (this.canSwim) {
+            if (s.getAnimal() != null) {
+                return isCanCapture(s.getAnimal(), ifPrint);
+                /*
+                 * Change origin logic to isCanCapture logic
+                 */
+//                if (s.getAnimal().rank == 1 || s.getAnimal().rank == 8) {
+//                    return isCanCapture(s.getAnimal());
+//                } else {
+//                    monitor.printWarning();
+//                    return false;
+//                }
+            } else
                 return true;
-        else
+        }
+        else {
+            monitor.printWarning("This animal cannot swim!", ifPrint);
             return false;
+        }
     }//check if it can swim to square s, if rat in river, use this function
 
-    public boolean checkMoveLegal(Square s) {
+    public boolean checkMoveLegal(Square s, boolean ifPrint) {
         int x=s.getLocation()[0];
         int y=s.getLocation()[1];
-
-
-        //can not be out of chess board
-        if (x<0||x>8)
+        // Check alive
+        if (!getAlive()) {
+            monitor.printWarning(this.getName()+" has been slain!", ifPrint);
             return false;
-        if (y<0||y>6)
+        }
+        //boundary
+        if(x == this.x && y == this.y) {
+            monitor.printWarning("Your animal cannot move outside the boundaries!", ifPrint);
             return false;
-
+        }
         //can not move into player's own den
         if(this.getSide()==0){
-            if (x == 8 && y == 3)
+            if (x == 8 && y == 3) {
+                monitor.printWarning("Your animal cannot move into your own den!", ifPrint);
                 return false;
+            }
         }else{
-            if (x == 0 && y == 3)
+            if (x == 0 && y == 3) {
+                monitor.printWarning("Your animal cannot move into your own den!", ifPrint);
                 return false;
+            }
         }
         //check swim legality
-        if (s.getType().equals("河")){
-            return  checkSwimLegal(s);
+        if (s.getType().equals("河") || board.getSquareByAnimal(this).getType().equals("河")){
+            return  checkSwimLegal(s, ifPrint);
         }
         //check jump legality, regard the expected destination as the adjacent one in river, not the real destination.
         if( x-this.x + y-this.y <-1 || x-this.x + y-this.y >1) {
-            return checkJumpLegal(s);
+            return checkJumpLegal(s, ifPrint);
 
         }
         if (s.getAnimal()!=null)
-            return isCanCapture(s.getAnimal());
-
+            return isCanCapture(s.getAnimal(), ifPrint);
         return true;
     }//check if it can move to square s whose location is (x,y), s should be an adjacent square of this animal (including capture)
 

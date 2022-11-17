@@ -30,8 +30,8 @@ public class CatTest {
 
     @Test
     public void nameTest() {
-        assertEquals(cat0.getName(), "Cat");
-        assertEquals(cat1.getName(), "Cat");
+        assertEquals(cat0.getName(), "貓");
+        assertEquals(cat1.getName(), "貓");
     }
 
 

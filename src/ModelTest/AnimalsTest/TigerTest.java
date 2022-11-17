@@ -31,8 +31,8 @@ public class TigerTest {
 
     @Test
     public void nameTest() {
-        assertEquals(tiger0.getName(),"Tiger");
-        assertEquals(tiger1.getName(),"Tiger");
+        assertEquals(tiger0.getName(),"虎");
+        assertEquals(tiger1.getName(),"虎");
     }
 
 }

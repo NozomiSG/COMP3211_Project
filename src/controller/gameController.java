@@ -1,13 +1,11 @@
 package controller;
 
 import model.Animal;
-import model.Animals.Cat;
-import model.ChessBoard;
 import model.Player;
 import model.Square;
 import view.monitor;
 
-import java.awt.*;
+
 import java.util.Scanner;
 
 
@@ -22,48 +20,53 @@ public class gameController {
     public static void gameProcess() {
         // Print welcome message
         monitor.printWelcome();
-        monitor.printHelp();
-
+        monitor.printManual();
         Scanner scanner = new Scanner(System.in);
-        boolean end = false;
-        monitor.printHelp();
         monitor.printChessboard(board);
         String command;
-        while (!end) {
-            System.out.print("Please input command with out blanks, end with enter:");
+        while (true) {
+            monitor.noticeToMove(side);
             command = scanner.next();
             while(! commandLegal(command)){
-                System.out.print("command illegal, please input again: ");
+                monitor.printWarning("Unknown command, please input again!", true);
+                monitor.noticeToMove(side);
                 command = scanner.next();
             }
-            if(command.equals("end")){
+            if (command.equals("exit")){
+                return;
+            }
+            if (command.equals("help")){
+                monitor.printManual();
                 break;
             }
-            if(command.equals("help")){
-                monitor.printHelp();
-                continue;
+            if (command.equals("restart")){
+                board.initChessBoard();
+                gameController.current_player = board.getPlayer0();
+                side = 0;
+                gameProcess();
             }
             else{
                 Animal selected_animal = readActionToAnimal(command);
                 Square dest = readActionToSquare(command);
                 boolean legal = selected_animal.move(dest);
-//                System.out.println(board.getSquares()[8][0].getAnimal());
-//                System.out.println(board.getSquares()[7][0].getAnimal());
-                System.out.println(board.getSquares()[7][0].getAnimal());
-                if(legal){
-                    changeTurn();
-                    System.out.println("!");
-//                    System.out.println(board.getSquares()[7][0].printSquare());
-//                    System.out.println(board.getSquares()[7][0].getAnimal());
-                    monitor.printChessboard(board);
-                    monitor.printTurnChange();
+                while(!legal){
+                    //monitor.printWarning();
+                    monitor.noticeToMove(side);
+                    command = scanner.next();
+                    selected_animal = readActionToAnimal(command);
+                    dest = readActionToSquare(command);
+                    legal = selected_animal.move(dest);
                 }
+                if (checkWinner()) {
+                    monitor.printWinMessage(side);
+                    return;
+                }
+
+                changeTurn();
+                monitor.printChessboard(board);
+//                    monitor.printTurnChange();
             }
-
-
-
         }
-
     } // Start the game with a while loop
 
 
@@ -76,7 +79,6 @@ public class gameController {
     public static Square readActionToSquare(String input) {
         Animal animal = readActionToAnimal(input);
         int rank = animal.getRank();
-        int side = current_player.getSide();
         int ax, ay;
         ax = animal.getLocation()[0];
         ay = animal.getLocation()[1];
@@ -84,32 +86,52 @@ public class gameController {
         if (rank == 6 || rank == 7) {
             if (direction == 'w') {
                 ax -= 1;
-                if (board.getSquares()[ax][ay].getType().equals("河")) {
-                    ax -= 3;
+                if(ax>-1 && ax< 9){
+                    if (board.getSquares()[ax][ay].getType().equals("河")) {
+                        ax -= 3;
+                    }
                 }
+                else ax +=1;
             } else if (direction == 's') {
                 ax += 1;
-                if (board.getSquares()[ax][ay].getType().equals("河")) {
-                    ax += 3;
+                if(ax>-1 && ax< 9){
+                    if (board.getSquares()[ax][ay].getType().equals("河"))
+                        ax += 3;
                 }
+                else ax-=1;
             } else if (direction == 'a') {
                 ay -= 1;
-                if (board.getSquares()[ax][ay].getType().equals("河")) {
-                    ay -= 2;
+                if(ay>-1 && ay< 7){
+                    if (board.getSquares()[ax][ay].getType().equals("河"))
+                        ay -= 2;
                 }
+                else ay +=1;
             } else if (direction == 'd') {
                 ay += 1;
-                if (board.getSquares()[ax][ay].getType().equals("河")) {
-                    ay += 2;
+                if(ay>-1 && ay< 7){
+                    if (board.getSquares()[ax][ay].getType().equals("河"))
+                        ay += 2;
                 }
+                else ay -=1;
             }
         } else {
-            if (direction == 'w') ax -= 1;
-            else if (direction == 's') ax += 1;
-            else if (direction == 'a') ay -= 1;
-            else if (direction == 'd') ay += 1;
+            if (direction == 'w') {
+                if (ax != 0)
+                    ax -= 1;
+            }
+            else if (direction == 's') {
+                if (ax != 8)
+                    ax += 1;
+            }
+            else if (direction == 'a') {
+                if (ay != 0)
+                    ay -= 1;
+            }
+            else if (direction == 'd') {
+                if (ay != 6)
+                    ay += 1;
+            }
         }
-
         return board.getSquares()[ax][ay];
     }
 
@@ -124,7 +146,7 @@ public class gameController {
         }
     } // change player side
 
-    public  boolean checkWinner() {
+    public static boolean checkWinner() {
         int flag = 0;
         for (int i=0; i<8;i++){
             if (side ==0){
@@ -134,80 +156,56 @@ public class gameController {
                 if(board.getPlayer0().getAnimals()[i].getAlive()) flag =1;
             }
         }
-        if(flag == 0) return true;
-        if (board.getSquares()[8][3].getAnimal()!= null || board.getSquares()[0][3].getAnimal()!= null) return true;
-        else if(!checkEnemyCanMove(side)) return true;
-
+        if(flag == 0) {
+            System.out.println("No enemy animal alive");
+            return true;
+        }
+        if (board.getSquares()[8][3].getAnimal()!= null || board.getSquares()[0][3].getAnimal()!= null){
+            System.out.println("Enemy den broken");
+            return true;
+        }
+        else if(!checkEnemyCanMove(side)){
+            System.out.println("Enemy can't move");
+            return true;
+        }
         return false;
     } // check if there is a winner
 
-    public static boolean checkRiver(Square s) {
-        return (s.getType().equals("河"));
-    } //check if it's in river
-
-//    public static boolean checkBoundary(Square s) {
-//        if (s.getLocation()[0] == 0 || s.getLocation()[0] == 8)
-//            return true;
-//        if (s.getLocation()[1] == 0 || s.getLocation()[1] == 6)
-//            return true;
-//        return false;
-//    } //check if destination is boundary
-//
-//    public static boolean checkSelfDens(Player p, Square s) {
-//        if (p.getSide() == 0)
-//            if (s.getLocation()[0] == 8 && s.getLocation()[1] == 3)
-//                return true;
-//        if (p.getSide() == 1)
-//            if (s.getLocation()[0] == 0 && s.getLocation()[1] == 3)
-//                return true;
-//        return false;
-//    } //check if it's a den of a player himself
-
-    public static boolean checkEndGame() {
-        boolean flag = true;
-        return flag;
-    } //check if the game ends
-
-    public boolean checkEnemyCanMove(int mySide) {
+    public static boolean checkEnemyCanMove(int mySide) {
         String direction = "wsad";
         Animal[] animals;
-        boolean flag = false;
         String input;
         if (mySide == 0) {
             animals = board.getPlayer1().getAnimals();
         } else animals = board.getPlayer0().getAnimals();
-
         for (int i = 0; i < 8; i++) {
             input = String.valueOf(i+1);
             if (animals[i].getAlive()) {
                 for (int j = 0; j < 4; j++) {
-                    input = input +String.valueOf(direction.charAt(j));
+                    input = input + direction.charAt(j);
                     Square s = readActionToSquare(input);
-                    if(animals[i].move(s)) return true;
+                    if(animals[i].checkMoveLegal(s, false)) return true;
                 }
             }
         }
         return false;
-
-
     }
 
     public static boolean commandLegal(String input){
-        if(!(input.length()==2 || input.length()==3 || input.length()==4 )) return false;
-        if(input.length() == 3){
-            if (!input.equals("end")) return false;
+        if(input.length() == 4){
+            return input.equals("help") || input.equals("exit");
         }
-        else if(input.length() == 4){
-            if (!input.equals("help")) return false;
+        else if(input.length() == 7){
+            return input.equals("restart");
         }
-        else{
-            boolean flag = false;
+        else if(input.length() == 2){
             if(input.charAt(0)-48<1 || input.charAt(0)-48>8) return false;
             for (char c: "wasd".toCharArray()){
-                if(c == input.charAt(1)) flag = true;
+                if (c == input.charAt(1)) {
+                    return true;
+                }
             }
-            return flag;
         }
-        return true;
+        return false;
     }
 }
