@@ -58,11 +58,10 @@ public class gameController {
                     dest = readActionToSquare(command);
                     legal = selected_animal.move(dest);
                 }
-                if (checkWinner()) {
+                if (checkWinner()){
                     monitor.printWinMessage(side);
                     return;
                 }
-
                 changeTurn();
                 monitor.printChessboard(board);
 //                    monitor.printTurnChange();
