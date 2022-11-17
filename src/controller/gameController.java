@@ -36,11 +36,11 @@ public class gameController {
                 monitor.printBye();
                 return;
             }
-            if (command.equals("help")){
+            else if (command.equals("help")){
                 monitor.printManual();
-//                break;
+                monitor.printChessboard(board);
             }
-            if (command.equals("restart")){
+            else if (command.equals("restart")){
                 board.initChessBoard();
                 gameController.current_player = board.getPlayer0();
                 side = 0;
