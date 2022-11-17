@@ -11,9 +11,7 @@ public abstract class Animal {
     private boolean canJump;
     private boolean alive = true;
 
-
     protected Animal() {}
-
 
     public int getRank() {return this.rank;}
 
@@ -43,15 +41,16 @@ public abstract class Animal {
     public void setAlive(boolean isAlive){
         this.alive = isAlive;
     }
+
     public boolean getAlive(){
         return this.alive;
     }
+
     public void setCanSwim(boolean canSwim) {
         this.canSwim=canSwim;
     }
 
     public boolean isCanSwim() {return canSwim;}
-
 
     public boolean move(Square s){
         if(this.checkMoveLegal(s, true)) {
@@ -69,7 +68,6 @@ public abstract class Animal {
         }
         else return false;
     }
-
 
     public boolean isCanCapture(Animal enemy, boolean ifPrint){
         String type = board.getSquareByAnimal(this).getType();
@@ -103,7 +101,6 @@ public abstract class Animal {
         }
 
     }
-
 
     public boolean checkJumpLegal(Square s, boolean ifPrint) {
         if (!(this.getName().equals("獅")||this.getName().equals("虎"))) {
@@ -152,15 +149,6 @@ public abstract class Animal {
         if (this.canSwim) {
             if (s.getAnimal() != null) {
                 return isCanCapture(s.getAnimal(), ifPrint);
-                /*
-                 * Change origin logic to isCanCapture logic
-                 */
-//                if (s.getAnimal().rank == 1 || s.getAnimal().rank == 8) {
-//                    return isCanCapture(s.getAnimal());
-//                } else {
-//                    monitor.printWarning();
-//                    return false;
-//                }
             } else
                 return true;
         }
