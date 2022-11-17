@@ -1,0 +1,35 @@
+package ModelTest;
+
+import model.ChessBoard;
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
+
+
+public class ChessBoardTest {
+    ChessBoard testBoard;
+
+    @Before
+    public void chessBoardConstructor() {testBoard = new ChessBoard();}
+
+    @Test
+    public void getSquaresTest1() {
+        //check chessboard size i.e. horizontal and vertical square number
+        assertEquals(9, testBoard.getSquares().length);
+        assertEquals(7, testBoard.getSquares()[0].length);
+    }
+
+    @Test
+    public void getSquaresTest2() {
+        //test the initialization of the chessboard by using getSquare(), i.e. check the square type
+        assertEquals("陷", testBoard.getSquares()[0][2].getType());
+        assertEquals("河", testBoard.getSquares()[5][1].getType());
+        assertEquals("穴", testBoard.getSquares()[8][3].getType());
+        assertEquals("　", testBoard.getSquares()[0][0].getType());
+    }
+
+
+
+
+}
