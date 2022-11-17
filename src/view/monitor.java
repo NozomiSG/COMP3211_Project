@@ -21,6 +21,7 @@ public class monitor {
             System.out.println();
         }
         System.out.println("============================");
+        System.out.println();
     }
 
     public static void printWarning(String warn, boolean ifPrint){
