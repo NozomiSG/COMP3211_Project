@@ -10,7 +10,13 @@ public class monitor {
         System.out.println("==========================");
         for (int i=0; i<9; i++) {
             for (int j=0; j<7; j++) {
-                System.out.print(currentBoard[i][j].printSquare());
+                if(currentBoard[i][j].getAnimal()!=null && currentBoard[i][j].getAnimal().getSide()==0){
+                    System.out.format("\33[44;97;1m"+currentBoard[i][j].printSquare()+"\033[m");
+                }else if(currentBoard[i][j].getAnimal()!=null && currentBoard[i][j].getAnimal().getSide()==1)
+                    System.out.format("\33[46;97;1m"+currentBoard[i][j].printSquare()+"\033[m");
+                else{
+                    System.out.print("\33[47;97m"+currentBoard[i][j].printSquare()+"\033[m");
+                }
             }
             System.out.println();
         }
