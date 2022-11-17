@@ -1,6 +1,7 @@
 package ModelTest;
 
-import model.Animals.Rat;
+import model.Animals.*;
+
 import model.Player;
 import org.junit.Before;
 import org.junit.Test;
