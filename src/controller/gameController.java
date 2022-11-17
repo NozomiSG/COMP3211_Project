@@ -33,11 +33,12 @@ public class gameController {
                 command = scanner.next();
             }
             if (command.equals("exit")){
+                monitor.printBye();
                 return;
             }
             if (command.equals("help")){
                 monitor.printManual();
-                break;
+//                break;
             }
             if (command.equals("restart")){
                 board.initChessBoard();
