@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact name="Jungle:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Jungle_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Jungle.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="Jungle" />
+      </element>
+      <element id="library" level="module" name="JUnit4" module-name="Jungle" />
+    </root>
+  </artifact>
+</component>
