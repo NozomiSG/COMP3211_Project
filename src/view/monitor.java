@@ -7,6 +7,7 @@ import model.Square;
 public class monitor {
     public static void printChessboard(ChessBoard board){
         Square[][] currentBoard = board.getSquares();
+        System.out.println();
         System.out.println("============================");
         for (int i=0; i<9; i++) {
             for (int j=0; j<7; j++) {
@@ -30,11 +31,11 @@ public class monitor {
     } //print warning message when users try to do invalid action
 
     public static void printBye() {
-        System.out.println(" ____             _ ");
-        System.out.println("| __ ) _   _  ___| |");
-        System.out.println("|  _ \\| | | |/ _ \\ |");
-        System.out.println("| |_) | |_| |  __/_|");
-        System.out.println("|____/ \\__, |\\___(_)");
+        System.out.println(" ____                _ ");
+        System.out.println("| __ ) _   _  ____  | |");
+        System.out.println("|  _ \\| | | |/ __ \\ | |");
+        System.out.println("| |_) | |_| |  ___/ |_|");
+        System.out.println("|____/ \\__, |\\___\\  (_)");
         System.out.println("       |___/        ");
     }
 
@@ -75,9 +76,9 @@ public class monitor {
 
     public static void printWinMessage(int side) {
         if (side == 0)
-            System.out.println("Player1 win the game!");
+            System.out.println("\33[;31;1m"+"Player1 win the game!"+"\033[m");
         else
-            System.out.println("Player2 win the game!");
+            System.out.println("\33[;34;1m"+"Player2 win the game!"+"\033[m");
     } // Print winner
 
 }

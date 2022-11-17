@@ -60,6 +60,7 @@ public class gameController {
                 }
                 if (checkWinner()){
                     monitor.printWinMessage(side);
+                    monitor.printBye();
                     return;
                 }
                 changeTurn();
@@ -157,18 +158,15 @@ public class gameController {
             }
         }
         if(flag == 0) {
-            System.out.println("No enemy animal alive");
+//          No enemy animal alive
             return true;
         }
         if (board.getSquares()[8][3].getAnimal()!= null || board.getSquares()[0][3].getAnimal()!= null){
-            System.out.println("Enemy den broken");
+//          Enemy den broken
             return true;
         }
-        else if(!checkEnemyCanMove(side)){
-            System.out.println("Enemy can't move");
-            return true;
-        }
-        return false;
+//      Enemy can't move
+        else return !checkEnemyCanMove(side);
     } // check if there is a winner
 
     public static boolean checkEnemyCanMove(int mySide) {
