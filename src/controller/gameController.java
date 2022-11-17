@@ -40,6 +40,15 @@ public class gameController {
                 break;
             }
             if (command.equals("restart")){
+                for (int i=0;i<8;i++){
+                   if (board.getPlayer0().getAnimals()[i].getAlive()==false){
+                       board.getPlayer0().getAnimals()[i].setAlive(true);
+                   };
+                   if(board.getPlayer1().getAnimals()[i].getAlive()==false){
+                       board.getPlayer0().getAnimals()[i].setAlive(true);
+                   }
+                }
+                board.initChessBoard();
                 gameProcess();
             }
             else{
