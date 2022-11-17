@@ -1,3 +1,5 @@
+package main;
+
 import controller.gameController;
 
 public class Jungle {
