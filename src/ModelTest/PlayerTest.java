@@ -1,12 +1,14 @@
 package ModelTest;
 
-import model.Animals.Rat;
+import model.Animals.*;
+
+
 import model.Player;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class PlayerTest {
@@ -23,6 +25,13 @@ public class PlayerTest {
     public void getAnimalsTest() {
         //test getAnimals()
         assertTrue(testPlayer1.getAnimals()[0] instanceof Rat);
+        assertTrue(testPlayer1.getAnimals()[1] instanceof Cat);
+        assertTrue(testPlayer1.getAnimals()[2] instanceof Dog);
+        assertTrue(testPlayer1.getAnimals()[3] instanceof Wolf);
+        assertTrue(testPlayer1.getAnimals()[4] instanceof Leopard);
+        assertTrue(testPlayer1.getAnimals()[5] instanceof Tiger);
+        assertTrue(testPlayer1.getAnimals()[6] instanceof Lion);
+        assertTrue(testPlayer1.getAnimals()[7] instanceof Elephant);
     }
 
     @Test
