@@ -15,7 +15,7 @@ public class monitor {
                 }else if(currentBoard[i][j].getAnimal()!=null && currentBoard[i][j].getAnimal().getSide()==1)
                     System.out.format("\33[46;1m"+currentBoard[i][j].printSquare()+"\033[m");
                 else{
-                    System.out.print("\33[47m"+currentBoard[i][j].printSquare()+"\033[m");
+                    System.out.format("\33[47m"+currentBoard[i][j].printSquare()+"\033[m");
                 }
             }
             System.out.println();
