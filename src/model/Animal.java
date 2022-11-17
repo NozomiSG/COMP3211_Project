@@ -1,11 +1,6 @@
 package model;
 
-import model.Square;
-import controller.gameController;
-
 import static model.ChessBoard.board;
-
-import model.Animals.*;
 import view.monitor;
 
 public abstract class Animal {
@@ -122,20 +117,34 @@ public abstract class Animal {
         int x1=s.getLocation()[0];
         int y0=this.y;
         int y1=s.getLocation()[1];
-        if(x0==x1)
-            for(int j=y1+1;j<=y1+2;j++){
-                if(board.getSquares()[x0][j].getAnimal()!=null &&board.getSquares()[x0][j].getAnimal().getName().equals("鼠")) {
+        if(x0==x1) {
+            // Check whether there is rat between y0 and y1
+            if (y0 > y1) {
+                int large = y0;
+                y0 = y1;
+                y1 = large;
+            }
+            for (int j = y0+1; j < y1; j++) {
+                if (board.getSquares()[x0][j].getAnimal() != null && board.getSquares()[x0][j].getAnimal().getName().equals("鼠")) {
                     monitor.printWarning("You can't jump over rat in the river!", ifPrint);
                     return false;
                 }
             }
-        else if(y0==y1)
-            for(int i=x1+1;i<=x1+3;i++){
-                if(board.getSquares()[i][y0].getAnimal()!=null && board.getSquares()[i][y0].getAnimal().getName().equals("鼠")) {
+        }
+        else if(y0==y1) {
+            // Check whether there is rat between x0 and x1
+            if (x0 > x1) {
+                int large = x0;
+                x0 = x1;
+                x1 = large;
+            }
+            for (int i = x0 + 1; i < x1; i++) {
+                if (board.getSquares()[i][y0].getAnimal() != null && board.getSquares()[i][y0].getAnimal().getName().equals("鼠")) {
                     monitor.printWarning("You can't jump over rat in the river!", ifPrint);
                     return false;
                 }
             }
+        }
         return true;
     }//check if it can jump to square s, s should be opposite river
 
