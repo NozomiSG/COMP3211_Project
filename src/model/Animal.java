@@ -197,5 +197,5 @@ public abstract class Animal {
         return true;
     }//check if it can move to square s whose location is (x,y), s should be an adjacent square of this animal (including capture)
 
-    public String getName() {return "";}
+    abstract public String getName();
 }
