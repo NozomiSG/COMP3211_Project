@@ -85,5 +85,22 @@ public class SquareTest {
         assertTrue(testSquare1.getAnimal() instanceof Cat);
     }
 
+    @Test
+    public void printSquareTest() {
+        // Test: printSquare(), test whether the square can print out content correctly
+        // Case1: No animal inside square
+        assertEquals(" Den ", testSquare1.printSquare());
+        assertEquals(" Trap ", testSquare2.printSquare());
+        assertEquals(" River ", testSquare3.printSquare());
+        assertEquals(" 　 ", testSquare4.printSquare());
+
+        // Case2: Animal with side 0 in Square
+        testSquare1.setAnimal(new Cat(0));
+        testSquare2.setAnimal(new Cat(1));
+        assertEquals("2貓 ", testSquare1.printSquare());
+        assertEquals(" 貓2", testSquare2.printSquare());
+
+    }
+
 
 }

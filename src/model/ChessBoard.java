@@ -51,5 +51,4 @@ public class ChessBoard {
     public Player getPlayer1() {
         return player1;
     }
-
 }

@@ -16,7 +16,7 @@ public class AnimalTest {
     Dog dog1;
     Lion lion0;
     Elephant elephant0;
-    Cat cat1;
+    Cat cat1,cat0;
     Elephant elephant1;
     Tiger tiger1,tiger0;
 
@@ -45,6 +45,7 @@ public class AnimalTest {
         lion0 = new Lion(0);
         elephant0 = new Elephant(0);
         cat1 = new Cat(1);
+        cat0 = new Cat(0);
         elephant1 = new Elephant(1);
         tiger1 = new Tiger(1);
         tiger0 = new Tiger(0);
@@ -58,6 +59,7 @@ public class AnimalTest {
         cat1.setLocation(3,3);
         tiger1.setLocation(0,4);
         tiger0.setLocation(6,5);
+        cat0.setLocation(8,4);
 
         board.getSquares()[3][0].setAnimal(lion0);
         board.getSquares()[3][1].setAnimal(rat0);
@@ -68,6 +70,7 @@ public class AnimalTest {
         board.getSquares()[3][3].setAnimal(cat1);
         board.getSquares()[0][4].setAnimal(tiger1);
         board.getSquares()[6][5].setAnimal(tiger0);
+        board.getSquares()[8][4].setAnimal(cat0);
 
     }
 
@@ -146,9 +149,17 @@ public class AnimalTest {
     }
     @Test
     public void moveTest2() {
+        elephant1.move(board.getSquares()[1][1]);
+        rat0.move(board.getSquares()[2][1]);
+        //elephant can't capture rat
+        assertFalse(elephant1.checkMoveLegal(board.getSquares()[2][1],false));
+        rat0.move(board.getSquares()[3][1]);
+        elephant1.move(board.getSquares()[2][1]);
+
         //tiger1 can't to go his own den
         assertEquals(1, tiger1.getSide());
         assertFalse(tiger1.checkMoveLegal(board.getSquares()[0][3],false));
+        assertFalse(cat0.checkMoveLegal(board.getSquares()[8][3],false));
 
         //elephant can't jump
         assertFalse(elephant1.isCanJump());
@@ -171,9 +182,12 @@ public class AnimalTest {
         assertFalse(elephant0.getAlive());
 
 
+
+
     }
     @Test
     public void moveTest3() {
+
         //tiger can jump vertical
         assertTrue(tiger0.isCanJump());
         assertTrue(tiger0.checkJumpLegal(board.getSquares()[2][5],false));

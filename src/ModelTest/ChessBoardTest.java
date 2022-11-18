@@ -29,7 +29,17 @@ public class ChessBoardTest {
         assertEquals("　", testBoard.getSquares()[0][0].getType());
     }
 
+    @Test
+    public void getPlayer0Test() {
+        // Test: Return the side result of player0 from getSide()
+        assertEquals(0, testBoard.getPlayer0().getSide());
+    }
 
+    @Test
+    public void getPlayer1Test() {
+        // Test: Return the side result of player1 from getSide()
+        assertEquals(1, testBoard.getPlayer1().getSide());
+    }
 
 
 
