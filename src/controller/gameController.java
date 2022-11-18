@@ -5,7 +5,7 @@ import model.Player;
 import model.Square;
 import view.monitor;
 
-
+import  model.ChessBoard;
 import java.util.Scanner;
 
 
@@ -47,15 +47,15 @@ public class gameController {
                 gameProcess();
             }
             else{
-                Animal selected_animal = readActionToAnimal(command);
-                Square dest = readActionToSquare(command);
+                Animal selected_animal = readActionToAnimal(command,side);
+                Square dest = readActionToSquare(command,side);
                 boolean legal = selected_animal.move(dest);
                 while(!legal){
                     //monitor.printWarning();
                     monitor.noticeToMove(side);
                     command = scanner.next();
-                    selected_animal = readActionToAnimal(command);
-                    dest = readActionToSquare(command);
+                    selected_animal = readActionToAnimal(command,side);
+                    dest = readActionToSquare(command,side);
                     legal = selected_animal.move(dest);
                 }
                 if (checkWinner()){
@@ -71,14 +71,17 @@ public class gameController {
     } // Start the game with a while loop
 
 
-    public static Animal readActionToAnimal(String input) {
+    public static Animal readActionToAnimal(String input, int cur_side) {
         int rank = input.charAt(0) - 49;
-        return current_player.getAnimals()[rank];
+        if(cur_side ==0){
+            return board.getPlayer0().getAnimals()[rank];
+        }
+        else return board.getPlayer1().getAnimals()[rank];
     }
 
     // if lion, tiger, opposite river; else move with direction, no check legal
-    public static Square readActionToSquare(String input) {
-        Animal animal = readActionToAnimal(input);
+    public static Square readActionToSquare(String input, int cur_side) {
+        Animal animal = readActionToAnimal(input,cur_side);
         int rank = animal.getRank();
         int ax, ay;
         ax = animal.getLocation()[0];
@@ -166,10 +169,13 @@ public class gameController {
             return true;
         }
 //      Enemy can't move
-        else return !checkEnemyCanMove(side);
+        else {
+            return !checkEnemyCanMove(side);
+        }
     } // check if there is a winner
 
     public static boolean checkEnemyCanMove(int mySide) {
+
         String direction = "wsad";
         Animal[] animals;
         String input;
@@ -177,11 +183,11 @@ public class gameController {
             animals = board.getPlayer1().getAnimals();
         } else animals = board.getPlayer0().getAnimals();
         for (int i = 0; i < 8; i++) {
-            input = String.valueOf(i+1);
             if (animals[i].getAlive()) {
                 for (int j = 0; j < 4; j++) {
+                    input = String.valueOf(i+1);
                     input = input + direction.charAt(j);
-                    Square s = readActionToSquare(input);
+                    Square s = readActionToSquare(input,1-mySide);
                     if(animals[i].checkMoveLegal(s, false)) return true;
                 }
             }
@@ -206,4 +212,7 @@ public class gameController {
         }
         return false;
     }
+
+
+
 }
