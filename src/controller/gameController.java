@@ -43,6 +43,7 @@ public class gameController {
                 gameController.current_player = board.getPlayer0();
                 side = 0;
                 gameProcess();
+                return;
             }
             else{
                 Animal selected_animal = readActionToAnimal(command,side);
