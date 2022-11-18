@@ -4,8 +4,6 @@ import model.Animal;
 import model.Player;
 import model.Square;
 import view.monitor;
-
-import  model.ChessBoard;
 import java.util.Scanner;
 
 
@@ -59,6 +57,7 @@ public class gameController {
                     legal = selected_animal.move(dest);
                 }
                 if (checkWinner()){
+                    monitor.printChessboard(board);
                     monitor.printWinMessage(side);
                     monitor.printBye();
                     return;
