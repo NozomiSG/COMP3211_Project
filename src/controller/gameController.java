@@ -32,40 +32,41 @@ public class gameController {
                 monitor.noticeToMove(side);
                 command = scanner.next();
             }
-            if (command.equals("exit")){
-                monitor.printBye();
-                return;
-            }
-            else if (command.equals("help")){
-                monitor.printManual();
-                monitor.printChessboard(board);
-            }
-            else if (command.equals("restart")){
-                board.initChessBoard();
-                gameController.current_player = board.getPlayer0();
-                side = 0;
-                gameProcess();
-            }
-            else{
-                Animal selected_animal = readActionToAnimal(command);
-                Square dest = readActionToSquare(command);
-                boolean legal = selected_animal.move(dest);
-                while(!legal){
-                    //monitor.printWarning();
-                    monitor.noticeToMove(side);
-                    command = scanner.next();
-                    selected_animal = readActionToAnimal(command);
-                    dest = readActionToSquare(command);
-                    legal = selected_animal.move(dest);
-                }
-                if (checkWinner()){
-                    monitor.printWinMessage(side);
+            switch (command) {
+                case "exit":
                     monitor.printBye();
                     return;
-                }
-                changeTurn();
-                monitor.printChessboard(board);
+                case "help":
+                    monitor.printManual();
+                    monitor.printChessboard(board);
+                    break;
+                case "restart":
+                    board.initChessBoard();
+                    gameController.current_player = board.getPlayer0();
+                    side = 0;
+                    gameProcess();
+                    break;
+                default:
+                    Animal selected_animal = readActionToAnimal(command);
+                    Square dest = readActionToSquare(command);
+                    boolean legal = selected_animal.move(dest);
+                    while (!legal) {
+                        //monitor.printWarning();
+                        monitor.noticeToMove(side);
+                        command = scanner.next();
+                        selected_animal = readActionToAnimal(command);
+                        dest = readActionToSquare(command);
+                        legal = selected_animal.move(dest);
+                    }
+                    if (checkWinner()) {
+                        monitor.printWinMessage(side);
+                        monitor.printBye();
+                        return;
+                    }
+                    changeTurn();
+                    monitor.printChessboard(board);
 //                    monitor.printTurnChange();
+                    break;
             }
         }
     } // Start the game with a while loop
